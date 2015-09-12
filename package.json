@@ -36,11 +36,12 @@
   "devDependencies": {
     "benchmark": "1.0.0",
     "browserify": "^11.1.0",
+    "chai": "^3.2.0",
     "colors": "^1.0.3",
     "eslint": "^1.5.1",
     "http-server": "^0.8.0",
     "jscs": "^1.12.0",
-    "nodeunit": "0.9.1",
+    "mocha": "^2.3.1",
     "optimist": "0.6.1",
     "portfinder": "0.4.0",
     "q": "^1.2.0",
@@ -58,7 +59,7 @@
   "scripts": {
     "prepublish": "npm run convert-idl",
     "pretest": "npm run convert-idl && git submodule update --init --recursive",
-    "test": "node ./test/runner",
+    "test": "mocha -u exports test/index",
     "test-browser": "node ./test/browser-runner",
     "lint": "jscs lib/ && jscs test/ && eslint . && eslint --no-ignore lib/jsdom/living/generated/**/*-impl.js",
     "update-authors": "git log --format=\"%aN <%aE>\" | sort -f | uniq > AUTHORS.txt",

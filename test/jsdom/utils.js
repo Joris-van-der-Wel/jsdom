@@ -1,7 +1,9 @@
 "use strict";
+
+const t = require("chai").assert;
 const utils = require("../../lib/jsdom/utils");
 
-exports["defineSetter defines a setter"] = t => {
+exports["defineSetter defines a setter"] = () => {
   const o = {};
   let called = false;
   const expected = "bar";
@@ -15,11 +17,9 @@ exports["defineSetter defines a setter"] = t => {
   o.foo = expected;
   t.equal(called, true);
   t.equal(actual, expected);
-
-  t.done();
 };
 
-exports["defineSetter replaces existing setters"] = t => {
+exports["defineSetter replaces existing setters"] = () => {
   const o = {};
   let originalCalled = false;
   let newCalled = false;
@@ -30,11 +30,9 @@ exports["defineSetter replaces existing setters"] = t => {
   o.foo = true;
   t.equal(originalCalled, false);
   t.equal(newCalled, true);
-
-  t.done();
 };
 
-exports["defineSetter does not remove existing getters"] = t => {
+exports["defineSetter does not remove existing getters"] = () => {
   const o = {};
   let called = false;
   const expected = "bar";
@@ -50,11 +48,9 @@ exports["defineSetter does not remove existing getters"] = t => {
   actual = o.foo;
   t.equal(called, true);
   t.equal(actual, expected);
-
-  t.done();
 };
 
-exports["defineGetter defines a getter"] = t => {
+exports["defineGetter defines a getter"] = () => {
   const o = {};
   let called = false;
   const expected = "bar";
@@ -68,11 +64,9 @@ exports["defineGetter defines a getter"] = t => {
   actual = o.foo;
   t.equal(called, true);
   t.equal(actual, expected);
-
-  t.done();
 };
 
-exports["defineGetter replaces existing getters"] = t => {
+exports["defineGetter replaces existing getters"] = () => {
   const o = {};
   let originalCalled = false;
   let newCalled = false;
@@ -86,11 +80,9 @@ exports["defineGetter replaces existing getters"] = t => {
 
   t.equal(originalCalled, false);
   t.equal(newCalled, true);
-
-  t.done();
 };
 
-exports["defineGetter does not remove existing setters"] = t => {
+exports["defineGetter does not remove existing setters"] = () => {
   const o = {};
   let called = false;
   const expected = "bar";
@@ -106,21 +98,17 @@ exports["defineGetter does not remove existing setters"] = t => {
   o.foo = expected;
   t.equal(called, true);
   t.equal(actual, expected);
-
-  t.done();
 };
 
-exports["createFrom returns an object with the given [[Prototype]]"] = t => {
+exports["createFrom returns an object with the given [[Prototype]]"] = () => {
   const proto = {};
 
   const o = utils.createFrom(proto);
   t.strictEqual(Object.getPrototypeOf(o), proto);
-
-  t.done();
 };
 
 
-exports["createFrom returns an object extended with the given properties"] = t => {
+exports["createFrom returns an object extended with the given properties"] = () => {
   const properties = {
     get accessor() {},
     set accessor(value) {},
@@ -147,11 +135,9 @@ exports["createFrom returns an object extended with the given properties"] = t =
       name + " descriptors should be deeply equal"
     );
   }
-
-  t.done();
 };
 
-exports["inheritFrom sets Subclass.prototype to an object w/ [[Prototype]] Superclass.prototype"] = t => {
+exports["inheritFrom sets Subclass.prototype to an object w/ [[Prototype]] Superclass.prototype"] = () => {
   function Subclass() {}
   function Superclass() {}
 
@@ -159,22 +145,18 @@ exports["inheritFrom sets Subclass.prototype to an object w/ [[Prototype]] Super
 
   t.strictEqual(Object.getPrototypeOf(Subclass.prototype),
     Superclass.prototype);
-
-  t.done();
 };
 
-exports["inheritFrom sets Subclass.prototype.constructor to Subclass"] = t => {
+exports["inheritFrom sets Subclass.prototype.constructor to Subclass"] = () => {
   function Subclass() {}
   function Superclass() {}
 
   utils.inheritFrom(Superclass, Subclass);
 
   t.strictEqual(Subclass.prototype.constructor, Subclass);
-
-  t.done();
 };
 
-exports["inheritFrom extends Subclass.prototype with the given properties"] = t => {
+exports["inheritFrom extends Subclass.prototype with the given properties"] = () => {
   function Subclass() {}
   function Superclass() {}
   const properties = {
@@ -204,11 +186,9 @@ exports["inheritFrom extends Subclass.prototype with the given properties"] = t 
       name + " descriptors should be deeply equal"
     );
   }
-
-  t.done();
 };
 
-exports["isValidTargetOrigin properly validates target origin"] = t => {
+exports["isValidTargetOrigin properly validates target origin"] = () => {
   t.strictEqual(utils.isValidTargetOrigin("*"), true);
   t.strictEqual(utils.isValidTargetOrigin("/"), true);
   t.strictEqual(utils.isValidTargetOrigin("https://www.google.com/"), true);
@@ -221,6 +201,4 @@ exports["isValidTargetOrigin properly validates target origin"] = t => {
   t.strictEqual(utils.isValidTargetOrigin("google.com"), false);
   t.strictEqual(utils.isValidTargetOrigin("google"), false);
   t.strictEqual(utils.isValidTargetOrigin("?"), false);
-
-  t.done();
 };
