@@ -1,10 +1,10 @@
 language: node_js
 node_js: stable
-sudo: false
 
 git:
   submodules: false
 
+script: echo skip
 script:
   - npm run lint
   - npm test
@@ -40,9 +40,24 @@ matrix:
             - libpango1.0-dev
             - libgif-dev
             - build-essential
-    - script: '[ "${TRAVIS_PULL_REQUEST}" != "false" ] || (npm run pretest && npm run test-browser)'
-      env: TEST_SUITE=browser
-      addons:
-        sauce_connect:
-          username: "jsdom"
-          access_key: "7d402b1d-0388-467c-8d99-edf195456eee"
+    - env: TEST_SUITE=browser
+      # Normally, travis runs your script in a docker container.
+      # I've had firefox crash in docker containers (firefox tries to use linux namespaces, just like docker)
+      # "sudo: required" causes travis to use a VM instead.
+      sudo: required
+      dist: trusty
+      before_install:
+        - sudo add-apt-repository -y ppa:ubuntu-mozilla-daily/firefox-aurora
+        - sudo apt-get -qq update
+        - sudo apt-get install -y xvfb openbox firefox
+      script:
+        - lsb_release -a
+        - /usr/lib/firefox/firefox.sh --version
+        - Xvfb :100 -ac -noreset -screen 0 1024x768x16 &
+        - export DISPLAY=:100.0
+        # Firefox can crash if you do not have a window manager
+        # (for example when window.open() tries to maximize the new window)
+        - openbox &
+        - export FIREFOX_BIN=/usr/lib/firefox/firefox.sh
+        - npm run pretest
+        - npm run test-browser
